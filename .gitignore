@@ -1,0 +1,7 @@
+classes/
+com/
+*.apk
+*.apk.unaligned
+*.dex
+*.flata
+*.jks
