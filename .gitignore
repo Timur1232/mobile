@@ -1,7 +1,6 @@
-classes/
-com/
-*.apk
-*.apk.unaligned
-*.dex
-*.flata
+build/
 *.jks
+tags
+*.db
+.gradle/
+.kotlin-lsp
