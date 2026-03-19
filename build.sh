@@ -32,13 +32,15 @@ fi
 mkdir ./$BUILD_DIR
 cd ./$BUILD_DIR
 
+SRC_DIR=../src
+
 mkdir -p lib/x86_64/
 mkdir -p lib/armeabi-v7a
 mkdir -p lib/aarch64
-$X86_64_CLANG -shared -o lib/x86_64/libmath.so ../main.c
-$ARMV7A_CLANG -shared -o lib/armeabi-v7a/libmath.so ../main.c
-$AARCH64_CLANG -shared -o lib/aarch64/libmath.so ../main.c
-# $ARMV8A_CLANG -shared -o lib/arm64-v8a/libmath.so ../main.c
+$X86_64_CLANG -shared -o lib/x86_64/libmath.so $SRC_DIR/main.c
+$ARMV7A_CLANG -shared -o lib/armeabi-v7a/libmath.so $SRC_DIR/main.c
+$AARCH64_CLANG -shared -o lib/aarch64/libmath.so $SRC_DIR/main.c
+# $ARMV8A_CLANG -shared -o lib/arm64-v8a/libmath.so $SRC_DIR/main.c
 
 
 $AAPT2 compile -o res.flata \
@@ -54,7 +56,7 @@ $AAPT2 link -o app.apk.unaligned \
 kotlinc -d classes \
     -cp $ANDROID_P_DIR/android.jar \
     -Xmetadata-version=2.2.0 \
-    ../MainActivity.kt
+    $SRC_DIR/MainActivity.kt
 
 $D8 --lib $ANDROID_P_DIR/android.jar \
     --output . \

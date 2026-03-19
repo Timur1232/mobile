@@ -1,5 +1,12 @@
 CompileFlags:
   Add: [
-    -I/home/timur/dev/thirdparty/android/sdk/ndk/30.0.14904198/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include,
+    -Wall, -Wextra
   ]
   Compiler: clang
+---
+If:
+  PathMatch: [csrc/.*\.c]
+CompileFlags:
+  Add: [
+    -I/home/timur/dev/thirdparty/android/sdk/ndk/30.0.14904198/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include,
+  ]
