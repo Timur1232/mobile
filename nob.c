@@ -64,13 +64,13 @@ bool clear_build_files()
             nob_log(NOB_ERROR, "Unable to delete build directory");
             return false;
         }
-        cmd_append(&cmd, "mkdir", BUILD_DIR);
-        if (!cmd_run(&cmd)) {
-            nob_log(NOB_ERROR, "Unable to create build directory");
-            return false;
-        }
-        nob_log(NOB_INFO, "Build files cleared");
     }
+    cmd_append(&cmd, "mkdir", BUILD_DIR);
+    if (!cmd_run(&cmd)) {
+        nob_log(NOB_ERROR, "Unable to create build directory");
+        return false;
+    }
+    nob_log(NOB_INFO, "Build files cleared");
     return true;
 }
 
@@ -243,6 +243,7 @@ int main(int argc, char **argv)
 
     const char* keystore = "keystore.jks";
 
+    bool ffi_enabled = true;
     StringDA c_src = {0};
     if (!find_files_by_extention(&c_src, csrc_dir, ".c")) return 1;
 
@@ -265,7 +266,9 @@ int main(int argc, char **argv)
 
     if (!set_current_dir(BUILD_DIR)) return 1;
 
-    if (!compile_c_libraries(targets, ARRAY_LEN(targets), so_name, c_src.items, c_src.count)) return 1;
+    if (ffi_enabled)
+        if (!compile_c_libraries(targets, ARRAY_LEN(targets), so_name, c_src.items, c_src.count)) return 1;
+
     if (!compile_resources(resources, ARRAY_LEN(resources))) return 1;
     if (!link_unaligned()) return 1;
 
@@ -273,7 +276,9 @@ int main(int argc, char **argv)
     if (!compile_dex()) return 1;
 
     if (!add_dex_to_apk()) return 1;
-    if (!add_c_libraries_to_apk(targets, ARRAY_LEN(targets), so_name)) return 1;
+
+    if (ffi_enabled)
+        if (!add_c_libraries_to_apk(targets, ARRAY_LEN(targets), so_name)) return 1;
 
     if (!align_apk()) return 1;
     if (!sign_apk(keystore))
